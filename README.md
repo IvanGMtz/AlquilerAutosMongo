@@ -13,7 +13,7 @@ El proyecto está desarrollado utilizando Node.js y MongoDB, por lo que necesita
 
 ## Configuración del archivo .env
 
-Crea un archivo `.env` en la raíz del proyecto y configura las variables de entorno necesarias, como la conexión a la base de datos y la clave privada para JWT. Un ejemplo de cómo configurar el archivo `.env` se proporciona en el archivo `.env.example`:
+Crea un archivo `.env` en la raíz del proyecto, configura las variables de entorno necesarias y la conexión a la base de datos. Un ejemplo de cómo configurar el archivo `.env` se proporciona en el archivo `.env.example`:
 
 ```json
 MY_SERVER={"hostname":"125.10.10.1", "port":"3000"}
@@ -21,8 +21,6 @@ MY_SERVER={"hostname":"125.10.10.1", "port":"3000"}
 ATLAS_USER="tu_usuario_de_MongoDB_Atlas"
 ATLAS_PASSWORD="tu_contraseña_de_MongoDB_Atlas"
 ATLAS_DB="nombre_de_tu_base_de_datos_en_Atlas"
-
-JWT_PRIVATE_KEY="Clave_privada_para_la_creación_del_token"
 ```
 
 ## Instalación de Dependencias
@@ -41,9 +39,9 @@ Una vez configuradas las variables de entorno, puedes iniciar el servidor con el
 npm run dev
 ```
 
-## Generación del Token
+## Petición
 
-Antes de interactuar con los endpoints protegidos, debes generar un token de autenticación JWT para acceder a las funcionalidades protegidas. Puedes hacerlo mediante la siguiente petición GET:
+Para de interactuar con los endpoints puedes hacerlo mediante la siguiente petición GET:
 
 ```
 GET http://125.10.10.1:3000/<nombre_endpoint>
@@ -135,3 +133,14 @@ GET http://125.10.10.1:3000/<nombre_endpoint>
    - Ruta: `/Automovil/:id`
    - Parámetro de Ruta: `id` - El ID del automóvil específico.
    - Descripción: Obtiene los detalles del automóvil correspondiente al ID proporcionado.
+
+## Dependencias Utilizadas
+
+Este proyecto utiliza diversas dependencias para su funcionamiento. A continuación, se detallan las dependencias principales y sus respectivas versiones:
+
+- **express**: 4.18.2 Express es un marco de aplicación web rápido, minimalista y flexible para Node.js. Es utilizado en este proyecto para manejar las rutas y la lógica de la aplicación.
+
+- **dotenv**: 16.3.1 Dotenv es una librería que permite cargar variables de entorno desde un archivo `.env`. En este proyecto, se utiliza para gestionar las configuraciones sensibles.
+- **express-rate-limit**: 6.8.1 Express Rate Limit es un middleware que proporciona limitación de velocidad y control de la frecuencia de las solicitudes HTTP. Se utiliza aquí para prevenir ataques de fuerza bruta y abusos.
+- **mongodb**: 5.7.0 MongoDB es una base de datos NoSQL ampliamente utilizada. En este proyecto, se usa para almacenar y recuperar datos relacionados con el alquiler de autos.
+- **nodemon**: 3.0.1 Nodemon es una herramienta que ayuda en el desarrollo al reiniciar automáticamente la aplicación cuando se detectan cambios en el código fuente. Esto agiliza el proceso de desarrollo y prueba.
