@@ -15,8 +15,7 @@ El proyecto está desarrollado utilizando Node.js y MongoDB, por lo que necesita
 
 Crea un archivo `.env` en la raíz del proyecto y configura las variables de entorno necesarias, como la conexión a la base de datos y la clave privada para JWT. Un ejemplo de cómo configurar el archivo `.env` se proporciona en el archivo `.env.example`:
 
-```
-makefile
+```json
 MY_SERVER={"hostname":"125.10.10.1", "port":"3000"}
 
 ATLAS_USER="tu_usuario_de_MongoDB_Atlas"
@@ -31,7 +30,6 @@ JWT_PRIVATE_KEY="Clave_privada_para_la_creación_del_token"
 Ejecuta el siguiente comando en la terminal para instalar las dependencias necesarias:
 
 ```
-
 npm install
 ```
 
@@ -40,7 +38,6 @@ npm install
 Una vez configuradas las variables de entorno, puedes iniciar el servidor con el siguiente comando:
 
 ```
-arduino
 npm run dev
 ```
 
@@ -49,13 +46,8 @@ npm run dev
 Antes de interactuar con los endpoints protegidos, debes generar un token de autenticación JWT para acceder a las funcionalidades protegidas. Puedes hacerlo mediante la siguiente petición GET:
 
 ```
-arduino
-GET http://125.10.10.1:3000/token?tabla=<nombre_tabla>
+GET http://125.10.10.1:3000/<nombre_endpoint>
 ```
-
-Sustituye `<nombre_tabla>` por el nombre de la tabla para la cual deseas generar el token (por ejemplo, "auto").
-
-**Se debe crear un token por cada tabla a utilizar** Los tokens deben ser ingresados como HTTP Headers de tipo Authorization.
 
 ## Endpoints Disponibles
 
