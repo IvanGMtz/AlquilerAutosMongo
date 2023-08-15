@@ -1,5 +1,51 @@
 use("db_campus_alquiler");
-db.createCollection('Cliente');
+
+db.createCollection("Cliente", {
+    validator: {
+      $jsonSchema: {
+        bsonType: 'object',
+        additionalProperties: false,
+        required: ['_id','ID', 'Nombre', 'Apellido', 'DNI', 'Direccion', 'Telefono', 'Email'],
+        properties: {
+          _id: {
+            bsonType: 'objectId',
+            description: 'El _id es generado automáticamente por MongoDB'
+          },
+          ID: {
+            bsonType: 'int',
+            description: 'El ID es autoincremental'
+          },
+          Nombre: {
+            bsonType: 'string',
+            description: 'El nombre es obligatorio y debe ser un string'
+          },
+          Apellido: {
+            bsonType: 'string',
+            description: 'El apellido es obligatorio y debe ser un string'
+          },
+          DNI: {
+            bsonType: 'string',
+            description: 'El DNI es obligatorio y debe ser un string numérico',
+            pattern: '^[0-9]+$'
+          },
+          Direccion: {
+            bsonType: 'string',
+            description: 'La dirección es obligatoria y debe ser un string'
+          },
+          Telefono: {
+            bsonType: 'string',
+            description: 'El teléfono es obligatorio y debe ser un string numérico',
+            pattern: '^[0-9]+$'
+          },
+          Email: {
+            bsonType: 'string',
+            description: 'El email es obligatorio y debe ser un string de correo electrónico',
+            pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
+          }
+        }
+      }
+    }
+});
 
 db.Cliente.insertMany([
     { 
@@ -44,7 +90,49 @@ db.Cliente.insertMany([
         Email: 'carlos@example.com'}
 ]);
 
-db.createCollection('Automovil');
+db.createCollection("Automovil", {
+    validator: {
+      $jsonSchema: {
+        bsonType: 'object',
+        additionalProperties: false,
+        required: ['_id','ID', 'Marca', 'Modelo', 'Anio', 'Tipo', 'Capacidad', 'Precio_Diario'],
+        properties: {
+          _id: {
+            bsonType: 'objectId',
+            description: 'El _id es generado automáticamente por MongoDB'
+          },
+          ID: {
+            bsonType: 'int',
+            description: 'El ID es autoincremental'
+          },
+          Marca: {
+            bsonType: 'string',
+            description: 'La marca es obligatoria y debe ser un string'
+          },
+          Modelo: {
+            bsonType: 'string',
+            description: 'El modelo es obligatorio y debe ser un string'
+          },
+          Anio: {
+            bsonType: 'int',
+            description: 'El año es obligatorio y debe ser un entero'
+          },
+          Tipo: {
+            bsonType: 'string',
+            description: 'El tipo es obligatorio y debe ser un string'
+          },
+          Capacidad: {
+            bsonType: 'int',
+            description: 'La capacidad es obligatoria y debe ser un entero'
+          },
+          Precio_Diario: {
+            bsonType: 'int',
+            description: 'El precio diario es obligatorio y debe ser un número entero'
+          }
+        }
+      }
+    }
+});
 
 db.Automovil.insertMany([
     { 
@@ -54,7 +142,7 @@ db.Automovil.insertMany([
         Anio: 2021, 
         Tipo: 'Sedan', 
         Capacidad: 5, 
-        Precio_Diario: 50.00},
+        Precio_Diario: 50},
     { 
         ID: 2, 
         Marca: 'Honda', 
@@ -62,7 +150,7 @@ db.Automovil.insertMany([
         Anio: 2020, 
         Tipo: 'Sedan', 
         Capacidad: 5, 
-        Precio_Diario: 45.00},
+        Precio_Diario: 45},
     { 
         ID: 3, 
         Marca: 'Ford', 
@@ -70,7 +158,7 @@ db.Automovil.insertMany([
         Anio: 2019, 
         Tipo: 'SUV', 
         Capacidad: 7, 
-        Precio_Diario: 60.00},
+        Precio_Diario: 60},
     { 
         ID: 4, 
         Marca: 'Chevrolet', 
@@ -78,7 +166,7 @@ db.Automovil.insertMany([
         Anio: 2022, 
         Tipo: 'SUV', 
         Capacidad: 5, 
-        Precio_Diario: 55.00},
+        Precio_Diario: 55},
     { 
         ID: 5, 
         Marca: 'Nissan', 
@@ -86,10 +174,60 @@ db.Automovil.insertMany([
         Anio: 2022, 
         Tipo: 'Sedan', 
         Capacidad: 4, 
-        Precio_Diario: 48.00}
+        Precio_Diario: 48}
 ]);
 
-db.createCollection('Sucursal');
+db.createCollection("Sucursal", {
+    validator: {
+      $jsonSchema: {
+        bsonType: 'object',
+        additionalProperties: false,
+        required: ['_id','ID', 'Nombre', 'Direccion', 'Telefono', 'AutomovilesDisponibles'],
+        properties: {
+        _id: {
+            bsonType: 'objectId',
+            description: 'El _id es generado automáticamente por MongoDB'
+            },
+          ID: {
+            bsonType: 'int',
+            description: 'El ID es autoincremental'
+          },
+          Nombre: {
+            bsonType: 'string',
+            description: 'El nombre es obligatorio y debe ser un string',
+            pattern: '^[a-zA-Z ]+$'
+          },
+          Direccion: {
+            bsonType: 'string',
+            description: 'La dirección es obligatoria y debe ser un string'
+          },
+          Telefono: {
+            bsonType: 'string',
+            description: 'El teléfono es obligatorio y debe ser un string numérico',
+            pattern: '^[0-9]+$'
+          },
+          AutomovilesDisponibles: {
+            bsonType: 'array',
+            description: 'La lista de automóviles disponibles debe ser un array',
+            items: {
+              bsonType: 'object',
+              required: ['ID_Automovil', 'Cantidad_Disponible'],
+              properties: {
+                ID_Automovil: {
+                  bsonType: 'int',
+                  description: 'El ID del automóvil es obligatorio y debe ser un entero'
+                },
+                Cantidad_Disponible: {
+                  bsonType: 'int',
+                  description: 'La cantidad disponible debe ser un entero'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+});
 
 db.Sucursal.insertMany([
     { ID: 1, 
@@ -132,11 +270,56 @@ db.Sucursal.insertMany([
         { ID_Automovil: 5, Cantidad_Disponible: 1 }
       ]
     }
-  ]);
+]);
 
 // Colección: Contrato (fusion de Alquiler y Reserva)
-
-db.createCollection('Contrato');
+db.createCollection("Contrato", {
+    validator: {
+      $jsonSchema: {
+        bsonType: 'object',
+        additionalProperties: false,
+        required: ['_id','ID', 'ID_Cliente', 'ID_Automovil', 'Fecha_Inicio', 'Fecha_Fin', 'Costo_Total', 'Estado', 'Tipo'],
+        properties: {
+          _id: {
+            bsonType: 'objectId',
+            description: 'El _id es generado automáticamente por MongoDB'
+          },
+          ID: {
+            bsonType: 'int',
+            description: 'El ID es autoincremental'
+          },
+          ID_Cliente: {
+            bsonType: 'int',
+            description: 'El ID del cliente es obligatorio y debe ser un entero'
+          },
+          ID_Automovil: {
+            bsonType: 'int',
+            description: 'El ID del automóvil es obligatorio y debe ser un entero'
+          },
+          Fecha_Inicio: {
+            bsonType: 'date',
+            description: 'La fecha de inicio es obligatoria y debe ser en formato ISODate'
+          },
+          Fecha_Fin: {
+            bsonType: 'date',
+            description: 'La fecha de fin es obligatoria y debe ser en formato ISODate'
+          },
+          Costo_Total: {
+            bsonType: 'int',
+            description: 'El costo total es obligatorio y debe ser un número entero'
+          },
+          Estado: {
+            bsonType: 'string',
+            description: 'El estado es obligatorio y debe ser un string'
+          },
+          Tipo: {
+            bsonType: 'string',
+            description: 'El tipo es obligatorio y debe ser un string'
+          }
+        }
+      }
+    }
+});
 
 db.Contrato.insertMany([
     { 
@@ -145,7 +328,7 @@ db.Contrato.insertMany([
         ID_Automovil: 3, 
         Fecha_Inicio: ISODate('2023-07-01'), 
         Fecha_Fin: ISODate('2023-07-05'), 
-        Costo_Total: 240.00, 
+        Costo_Total: 240, 
         Estado: 'Activo', 
         Tipo: 'Alquiler'},
     { 
@@ -154,7 +337,7 @@ db.Contrato.insertMany([
         ID_Automovil: 4, 
         Fecha_Inicio: ISODate('2023-07-02'), 
         Fecha_Fin: ISODate('2023-07-07'), 
-        Costo_Total: 275.00, 
+        Costo_Total: 275, 
         Estado: 'Disponible', 
         Tipo: 'Alquiler'},
     { 
@@ -163,7 +346,7 @@ db.Contrato.insertMany([
         ID_Automovil: 1, 
         Fecha_Inicio: ISODate('2023-07-03'), 
         Fecha_Fin: ISODate('2023-07-06'), 
-        Costo_Total: 150.00, 
+        Costo_Total: 150, 
         Estado: 'Activo', 
         Tipo: 'Alquiler'},
     { 
@@ -172,7 +355,7 @@ db.Contrato.insertMany([
         ID_Automovil: 5, 
         Fecha_Inicio: ISODate('2023-07-04'), 
         Fecha_Fin: ISODate('2023-07-08'), 
-        Costo_Total: 192.00, 
+        Costo_Total: 192, 
         Estado: 'Activo', 
         Tipo: 'Alquiler'},
     { 
@@ -181,7 +364,7 @@ db.Contrato.insertMany([
         ID_Automovil: 2, 
         Fecha_Inicio: ISODate('2023-07-05'), 
         Fecha_Fin: ISODate('2023-07-09'), 
-        Costo_Total: 225.00, 
+        Costo_Total: 225, 
         Estado: 'Disponible', 
         Tipo: 'Alquiler'},
     { 
@@ -227,107 +410,61 @@ db.Contrato.insertMany([
         Tipo: 'Reserva'},
 ]);
 
-//Registro(Union de ambos registros)
-
-db.createCollection('Registro');
-
-db.Registro.insertMany([
-    { 
-        ID: 1, 
-        ID_Contrato: 1, 
-        ID_Empleado: 3, 
-        Fecha_Entrega: ISODate('2023-07-05'), 
-        Combustible_Entregado: 40.00, 
-        Kilometraje_Entregado: 2000, 
-        Tipo_Registro: 'Entrega'},
-    { 
-        ID: 2, 
-        ID_Contrato: 2, 
-        ID_Empleado: 4, 
-        Fecha_Entrega: ISODate('2023-07-07'), 
-        Combustible_Entregado: 30.00, 
-        Kilometraje_Entregado: 1800, 
-        Tipo_Registro: 'Entrega'},
-    { 
-        ID: 3, 
-        ID_Contrato: 3, 
-        ID_Empleado: 1, 
-        Fecha_Entrega: ISODate('2023-07-06'), 
-        Combustible_Entregado: 45.00, 
-        Kilometraje_Entregado: 2200, 
-        Tipo_Registro: 'Entrega'},
-    { 
-        ID: 4, 
-        ID_Contrato: 4, 
-        ID_Empleado: 5, 
-        Fecha_Entrega: ISODate('2023-07-08'), 
-        Combustible_Entregado: 50.00, 
-        Kilometraje_Entregado: 2400, 
-        Tipo_Registro: 'Entrega'},
-    { 
-        ID: 5, 
-        ID_Contrato: 5, 
-        ID_Empleado: 2, 
-        Fecha_Entrega: ISODate('2023-07-09'), 
-        Combustible_Entregado: 35.00, 
-        Kilometraje_Entregado: 1900, 
-        Tipo_Registro: 'Entrega'},
-    { 
-        ID: 6, 
-        ID_Contrato: 1, 
-        ID_Empleado: 3, 
-        Fecha_Devolucion: ISODate('2023-07-10'), 
-        Combustible_Devuelto: 10.00,
-        Kilometraje_Devuelto: 2500,
-        Monto_Adicional: 20.00,
-        Tipo_Registro: 'Devolucion'},
-    { 
-        ID: 7, 
-        ID_Contrato: 2, 
-        ID_Empleado: 4, 
-        Fecha_Devolucion: ISODate('2023-07-12'), 
-        Combustible_Devuelto: 15.00,
-        Kilometraje_Devuelto: 2100,
-        Monto_Adicional: 15.00,
-        Tipo_Registro: 'Devolucion'},
-    { 
-        ID: 8, 
-        ID_Contrato: 3, 
-        ID_Empleado: 1, 
-        Fecha_Devolucion: ISODate('2023-07-11'), 
-        Combustible_Devuelto: 20.00,
-        Kilometraje_Devuelto: 2300,
-        Monto_Adicional: 25.00,
-        Tipo_Registro: 'Devolucion'},
-    { 
-        ID: 9, 
-        ID_Contrato: 4, 
-        ID_Empleado: 5, 
-        Fecha_Devolucion: ISODate('2023-07-13'), 
-        Combustible_Devuelto: 25.00, 
-        Kilometraje_Devuelto: 2600,
-        Monto_Adicional: 30.00,Tipo_Registro: 'Devolucion'},
-    { 
-        ID: 10, 
-        ID_Contrato: 5, 
-        ID_Empleado: 2, 
-        Fecha_Devolucion: ISODate('2023-07-14'), 
-        Combustible_Devuelto: 18.00, 
-        Kilometraje_Devuelto: 2000,
-        Monto_Adicional: 12.00,
-        Tipo_Registro: 'Devolucion'}
-]);
-
-db.createCollection('Empleado');
+// db.createCollection("Empleado", {
+//     validator: {
+//       $jsonSchema: {
+//         bsonType: 'object',
+//         additionalProperties: false,
+//         required: ['_id','ID', 'Nombre', 'Apellido', 'DNI', 'Direccion', 'Telefono', 'Cargo'],
+//         properties: {
+//           _id: {
+//             bsonType: 'objectId',
+//             description: 'El _id es generado automáticamente por MongoDB'
+//           },
+//           ID: {
+//             bsonType: 'int',
+//             description: 'El ID es autoincremental'
+//           },
+//           Nombre: {
+//             bsonType: 'string',
+//             description: 'El nombre es obligatorio y debe ser un string',
+//             pattern: '^[a-zA-Z ]+$'
+//           },
+//           Apellido: {
+//             bsonType: 'string',
+//             description: 'El apellido es obligatorio y debe ser un string',
+//             pattern: '^[a-zA-Z ]+$'
+//           },
+//           DNI: {
+//             bsonType: 'string',
+//             description: 'El DNI es obligatorio y debe ser un string numérico'
+//           },
+//           Direccion: {
+//             bsonType: 'string',
+//             description: 'La dirección es obligatoria y debe ser un string'
+//           },
+//           Telefono: {
+//             bsonType: 'string',
+//             description: 'El teléfono es obligatorio y debe ser un string numérico'
+//           },
+//           Cargo: {
+//             bsonType: 'string',
+//             description: 'El cargo es obligatorio y debe ser un string'
+//           }
+//         }
+//       }
+//     }
+// });
+use("db_campus_alquiler");
 db.Empleado.insertMany([
-    { ID: 1, 
+    {   ID: 1, 
         Nombre: 'Ana', 
         Apellido: 'Gomez', 
         DNI: '123456789', 
         Direccion: 'Calle 111', 
         Telefono: '1111111111', 
         Cargo: 'Gerente' },
-    { ID: 2, 
+    {   ID: 2, 
         Nombre: 'Luis', 
         Apellido: 'Rodriguez', 
         DNI: '987654321', 
@@ -355,128 +492,153 @@ db.Empleado.insertMany([
         Direccion: 'Carretera 555', 
         Telefono: '5555555555', 
         Cargo: 'Chofer' }
-  ]);
-
-use("db_campus_alquiler");
-db.getCollection("Contrato").aggregate([
-    {
-        $match: {ID:{$eq:1}}
-    },
-    {
-        $lookup: {
-          from: "Cliente",
-          localField: "ID_Cliente",
-          foreignField: "ID",
-          as: "RelacionTablaCliente"
-        }
-    },
-    {
-        $unwind: '$RelacionTablaCliente'
-    },
-    {
-        $group: {
-          _id: "$ID",
-          BBBB: {
-            $first: "$ID_Cliente"
-          },
-          CCCC:{$push:"$RelacionTablaCliente"}
-        }
-    },
-    {
-        $project: {
-          "CCCC._id":0
-        }
-    }
 ]);
 
-//Mostrar todos los clientes
+//Registro(Union de ambos registros)
+// db.createCollection("Registro", {
+//     validator: {
+//       $jsonSchema: {
+//         bsonType: 'object',
+//         additionalProperties: false,
+//         required: ['_id','ID', 'ID_Contrato', 'ID_Empleado', 'Tipo_Registro'],
+//         properties: {
+//           _id: {
+//             bsonType: 'objectId',
+//             description: 'El _id es generado automáticamente por MongoDB'
+//           },
+//           ID: {
+//             bsonType: 'int',
+//             description: 'El ID es autoincremental'
+//           },
+//           ID_Contrato: {
+//             bsonType: 'int',
+//             description: 'El ID del contrato es obligatorio y debe ser un entero'
+//           },
+//           ID_Empleado: {
+//             bsonType: 'int',
+//             description: 'El ID del empleado es obligatorio y debe ser un entero'
+//           },
+//           Fecha_Entrega: {
+//             bsonType: 'date',
+//             description: 'La fecha de entrega es obligatoria y debe ser en formato ISODate'
+//           },
+//           Fecha_Devolucion: {
+//             bsonType: 'date',
+//             description: 'La fecha de devolucion debe ser en formato ISODate'
+//           },
+//           Combustible_Entregado: {
+//             bsonType: 'int',
+//             description: 'El combustible entregado es obligatorio y debe ser un número entero'
+//           },
+//           Kilometraje_Entregado: {
+//             bsonType: 'int',
+//             description: 'El kilometraje entregado es obligatorio y debe ser un entero'
+//           },
+//           Combustible_Devuelto: {
+//             bsonType: 'int',
+//             description: 'El combustible devueltodebe ser un número entero'
+//           },
+//           Kilometraje_Devuelto: {
+//             bsonType: 'int',
+//             description: 'El kilometraje devueltodebe ser un entero'
+//           },
+//           Monto_Adicional: {
+//             bsonType: 'int',
+//             description: 'El monto adicional debe ser un entero'
+//           },
+//           Tipo_Registro: {
+//             bsonType: 'string',
+//             description: 'El tipo de registro es obligatorio y debe ser un string'
+//           }
+//         }
+//       }
+//     }
+// });
 use("db_campus_alquiler");
-db.Cliente.find({},{_id:0})
-
-//Automoviles listos para alquilar
-
-use("db_campus_alquiler");
-db.getCollection("Contrato").aggregate([
-    {
-        $match: {Estado:{$eq:"Disponible"}}
-    },
-    {
-        $lookup: {
-          from: "Automovil",
-          localField: "ID_Automovil",
-          foreignField: "ID",
-          as: "Carro"
-        }
-    }, 
-    {
-        $unwind: '$Carro'
-    },
-    {
-        $group: {
-          _id: "$ID",
-          Carro: {
-            $push: "$Carro"
-          }
-        }
-    },
-    {
-        $project: {
-          "Carro._id":0
-        }
-    }
-]);
-
-//Alquileres Activos
-use("db_campus_alquiler");
-db.getCollection("Contrato").aggregate([
-    {
-        $match: {Estado:{$eq:"Activo"}}
-    },
-    {
-        $lookup: {
-          from: "Cliente",
-          localField: "ID_Cliente",
-          foreignField: "ID",
-          as: "Cliente"
-        }
-    },
-    {
-        $project: {
-          _id:0,
-          ID_Cliente:0,
-          "Cliente._id":0
-        }
-    }
-]);
-
-// Reservas pendientes con datos Cliente y Automovil
-use("db_campus_alquiler");
-db.getCollection("Contrato").aggregate([
-    {
-        $match: {Estado:{$eq:"Pendiente"}}
-    },
-    {
-        $lookup: {
-          from: "Cliente",
-          localField: "ID_Cliente",
-          foreignField: "ID",
-          as: "Cliente"
-        }
-    },
-    {
-        $lookup: {
-            from: "Automovil",
-            localField: "ID_Automovil",
-            foreignField: "ID",
-            as: "Carro"
-          }
-    },
-    {
-        $project: {
-          _id:0,
-          ID_Cliente:0,
-          "Cliente._id":0,
-          "Carro._id":0
-        }
-    }
+db.Registro.insertMany([
+    { 
+        ID: 1, 
+        ID_Contrato: 1, 
+        ID_Empleado: 3, 
+        Fecha_Entrega: ISODate('2023-07-05'), 
+        Combustible_Entregado: 40, 
+        Kilometraje_Entregado: 2000, 
+        Tipo_Registro: 'Entrega'},
+    { 
+        ID: 2, 
+        ID_Contrato: 2, 
+        ID_Empleado: 4, 
+        Fecha_Entrega: ISODate('2023-07-07'), 
+        Combustible_Entregado: 30, 
+        Kilometraje_Entregado: 1800, 
+        Tipo_Registro: 'Entrega'},
+    { 
+        ID: 3, 
+        ID_Contrato: 3, 
+        ID_Empleado: 1, 
+        Fecha_Entrega: ISODate('2023-07-06'), 
+        Combustible_Entregado: 45, 
+        Kilometraje_Entregado: 2200, 
+        Tipo_Registro: 'Entrega'},
+    { 
+        ID: 4, 
+        ID_Contrato: 4, 
+        ID_Empleado: 5, 
+        Fecha_Entrega: ISODate('2023-07-08'), 
+        Combustible_Entregado: 50, 
+        Kilometraje_Entregado: 2400, 
+        Tipo_Registro: 'Entrega'},
+    { 
+        ID: 5, 
+        ID_Contrato: 5, 
+        ID_Empleado: 2, 
+        Fecha_Entrega: ISODate('2023-07-09'), 
+        Combustible_Entregado: 35, 
+        Kilometraje_Entregado: 1900, 
+        Tipo_Registro: 'Entrega'},
+    { 
+        ID: 6, 
+        ID_Contrato: 1, 
+        ID_Empleado: 3, 
+        Fecha_Devolucion: ISODate('2023-07-10'), 
+        Combustible_Devuelto: 10,
+        Kilometraje_Devuelto: 2500,
+        Monto_Adicional: 20,
+        Tipo_Registro: 'Devolucion'},
+    { 
+        ID: 7, 
+        ID_Contrato: 2, 
+        ID_Empleado: 4, 
+        Fecha_Devolucion: ISODate('2023-07-12'), 
+        Combustible_Devuelto: 15,
+        Kilometraje_Devuelto: 2100,
+        Monto_Adicional: 15,
+        Tipo_Registro: 'Devolucion'},
+    { 
+        ID: 8, 
+        ID_Contrato: 3, 
+        ID_Empleado: 1, 
+        Fecha_Devolucion: ISODate('2023-07-11'), 
+        Combustible_Devuelto: 20,
+        Kilometraje_Devuelto: 2300,
+        Monto_Adicional: 25,
+        Tipo_Registro: 'Devolucion'},
+    { 
+        ID: 9, 
+        ID_Contrato: 4, 
+        ID_Empleado: 5, 
+        Fecha_Devolucion: ISODate('2023-07-13'), 
+        Combustible_Devuelto: 25, 
+        Kilometraje_Devuelto: 2600,
+        Monto_Adicional: 30,
+        Tipo_Registro: 'Devolucion'},
+    { 
+        ID: 10, 
+        ID_Contrato: 5, 
+        ID_Empleado: 2, 
+        Fecha_Devolucion: ISODate('2023-07-14'), 
+        Combustible_Devuelto: 18, 
+        Kilometraje_Devuelto: 2000,
+        Monto_Adicional: 12,
+        Tipo_Registro: 'Devolucion'}
 ]);
