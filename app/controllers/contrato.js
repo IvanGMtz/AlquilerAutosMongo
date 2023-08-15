@@ -89,4 +89,45 @@ const getSpecificRent= async(req, res)=>{
     res.send(result);
 }
 
-export { getContract, getContracts, getPendingReservation, getActiveRent, getSpecificRent}
+const getDate= async(req, res)=>{
+    if (!req.rateLimit) return;
+    let id = Number(req.params.id);
+    let db = await con();
+    let collection = db.collection("Contrato");
+    let result = await collection.aggregate([
+        {
+            $match: { Fecha_Inicio: new Date('2023-07-05') }
+        },
+        {
+            $project : {
+                _id : 0
+                
+            }
+        }
+    ]).toArray();
+    res.send(result);
+}
+
+const getBetweenDate= async(req, res)=>{
+    if (!req.rateLimit) return;
+    let id = Number(req.params.id);
+    let db = await con();
+    let collection = db.collection("Contrato");
+    let result = await collection.aggregate([
+        {
+            $match: {
+                Fecha_Inicio: { $gte: new Date('2023-07-05'), $lte: new Date('2023-07-10') },
+                Tipo: 'Alquiler'
+            }
+        },
+        {
+            $project : {
+                _id : 0
+                
+            }
+        }
+    ]).toArray();
+    res.send(result);
+}
+
+export { getContract, getContracts, getPendingReservation, getActiveRent, getSpecificRent, getDate, getBetweenDate}
