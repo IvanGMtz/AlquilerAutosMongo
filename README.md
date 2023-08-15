@@ -93,6 +93,12 @@ GET http://125.10.10.1:3000/<nombre_endpoint>
    - Ruta: `/Contrato/:id`
    - Parámetro de Ruta: `id` - El ID del contrato específico.
    - Descripción: Obtiene los detalles del contrato correspondiente al ID proporcionado.
+6. **Obtener detalles de un alquiler específico por la fecha '2023-07-05':**
+   - Método: GET
+   - Ruta: `/alquiler/fecha`
+7. **Obtener detalles de los alquileres con fecha de inicio entre '2023-07-05' y '2023-07-10':**
+   - Método: GET
+   - Ruta: `/alquiler/Entrefecha`
 
 ### Cliente:
 
